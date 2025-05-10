@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raga Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}?v=2">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=2">
+    
+    <style>
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+<div class="user-profile-link">
+    {% if session.get('user_id') %}
+        <a href="{{ url_for('profile') }}" class="profile-button">👤 {{ session.get('username', 'My Profile') }}</a>
+    {% else %}
+        <a href="{{ url_for('login') }}" class="profile-button">👤 Login</a>
+    {% endif %}
+</div>
+    
+    <!-- Rest of the HTML remains the same -->
+    <div class="container">
+        <!-- Raga Prediction System Title (Clickable for Info) -->
+        <h2 id="openModal">🎵 Raga Prediction System 🎶</h2>
+        <h3>Discover the magic of Indian classical music through AI</h3>
+    
+        <!-- Raga Info Modal -->
+        <div id="ragaModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>📖 What is Raga?</h3>
+                <p>Raga is a melodic framework in Indian classical music. It consists of specific notes, patterns, and moods that evoke different emotions.</p>
+                <p>Each raga has a distinct personality and is performed at different times of the day or for specific emotions.</p>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="tab-container">
+            <button class="tab-button active" onclick="showTab('fileUpload')">📂 Predict from File</button>
+            <button class="tab-button" onclick="showTab('livePrediction')">🎤 Live Predict</button>
+            <button class="tab-button" onclick="showTab('voiceCommands')">🗣️ Voice Commands</button>
+        </div>
+
+        <!-- Predict from File Section -->
+        <div id="fileUpload" class="tab-content active">
+            <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data">
+                <input type="file" name="audio" id="audioFile" accept=".wav" required>
+                <!-- Progress bar container -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar">
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+                <button type="submit" class="magic-button">✨ Predict from File ✨</button>
+            </form>
+        </div>
+
+        <!-- Live Prediction Section -->
+        <div id="livePrediction" class="tab-content">
+            <button id="livePredict" class="magic-button">🎤 Start Live Prediction</button>
+        </div>
+
+        <!-- Voice Commands Section -->
+        <div id="voiceCommands" class="tab-content">
+            <button id="startVoiceCommand" class="magic-button">🗣️ Start Voice Command</button>
+            <div id="voiceStatus" style="margin-top: 15px; font-style: italic;"></div>
+            
+            <div id="voiceHelp" style="
+            margin-top: 20px; 
+            padding: 20px; 
+            background-color: #e0e0e0; 
+            border-radius: 10px;
+            text-align: left;">
+            
+            <h4 style="margin-bottom: 10px;">📢 Available Voice Commands:</h4>
+            <ul style="padding-left: 20px; list-style: none;">
+                <li style="margin-bottom: 10px;"><strong>"Start live prediction"</strong> - Begins listening for raga</li>
+                <li style="margin-bottom: 10px;"><strong>"Upload file"</strong> - Opens file upload dialog</li>
+                <li style="margin-bottom: 10px;"><strong>"Download report"</strong> - Downloads the latest report</li>
+                <li style="margin-bottom: 10px;"><strong>"Show information"</strong> - Opens the raga information modal</li>
+                <li style="margin-bottom: 10px;"><strong>"Close modal"</strong> - Closes any open modal</li>
+                <li style="margin-bottom: 10px;"><strong>"Login"</strong> - Navigate to the login page</li>
+                <li style="margin-bottom: 10px;"><strong>"View profile"</strong> - Open your user profile</li>
+            </ul>
+        </div>
+        </div>
+
+        <div id="loading" style="display: none;">⏳ Processing...</div>
+        <div id="result" class="fade-in"></div>
+
+        <!-- Download Report Button (Hidden Initially) -->
+        <button id="downloadReport" class="magic-button" style="display:none;">📥 Download Report</button>
+    </div>
+
+    <script>
+        // Voice Recognition Variables
+        let recognition;
+        let isListening = false;
+        let lastPredictedRaga = '';
+        
+        // Check if browser supports speech recognition
+        function initVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.continuous = false;
+                recognition.lang = 'en-US';
+                
+                recognition.onstart = function() {
+                    isListening = true;
+                    if (document.getElementById('voiceIndicator')) {
+                        document.getElementById('voiceIndicator').style.opacity = '1';
+                    }
+                    document.getElementById('voiceStatus').innerHTML = '🎙️ Listening for commands...';
+                };
+                
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript.toLowerCase();
+                    document.getElementById('voiceStatus').innerHTML = `🔊 Heard: "${transcript}"`;
+                    processVoiceCommand(transcript);
+                };
+                
+                recognition.onend = function() {
+                    isListening = false;
+                    if (document.getElementById('voiceIndicator')) {
+                        document.getElementById('voiceIndicator').style.opacity = '0';
+                    }
+                    setTimeout(() => {
+                        if (!isListening) {
+                            document.getElementById('voiceStatus').innerHTML = '🔇 Voice recognition stopped';
+                        }
+                    }, 1000);
+                };
+                
+                recognition.onerror = function(event) {
+                    document.getElementById('voiceStatus').innerHTML = `⚠️ Error: ${event.error}`;
+                    isListening = false;
+                    if (document.getElementById('voiceIndicator')) {
+                        document.getElementById('voiceIndicator').style.opacity = '0';
+                    }
+                };
+                
+                return true;
+            } else {
+                document.getElementById('voiceStatus').innerHTML = '⚠️ Your browser does not support voice recognition';
+                return false;
+            }
+        }
+        
+// Process voice commands
+function processVoiceCommand(command) {
+    if (command.includes('start live') || command.includes('live predict')) {
+        document.getElementById('livePredict').click();
+        showTab('livePrediction');
+    } 
+    else if (command.includes('upload file')) {
+        showTab('fileUpload');
+        document.getElementById('audioFile').click();
+    }
+    else if (command.includes('download report for')) {
+        // Extract raga name from command
+        const ragaWords = command.split('download report for ')[1].trim();
+        // First letter uppercase for raga name
+        const raga = ragaWords.charAt(0).toUpperCase() + ragaWords.slice(1);
+        window.location.href = `/download_report/${raga}`;
+    }
+    else if (command.includes('download report')) {
+        if (lastPredictedRaga) {
+            window.location.href = `/download_report/${lastPredictedRaga}`;
+        } else if (document.getElementById('downloadReport').style.display !== 'none') {
+            document.getElementById('downloadReport').click();
+        } else {
+            document.getElementById('voiceStatus').innerHTML = '⚠️ No report available to download';
+        }
+    }
+    else if (command.includes('show information') || command.includes('what is raga')) {
+        document.getElementById('openModal').click();
+    }
+    else if (command.includes('close modal')) {
+        document.querySelector('.close').click();
+    }
+    // New commands for login and profile
+    else if (command.includes('login') || command.includes('sign in')) {
+        window.location.href = '/login';
+        document.getElementById('voiceStatus').innerHTML = '🔑 Navigating to login page...';
+    }
+    else if (command.includes('view profile') || command.includes('my profile') || command.includes('go to profile')) {
+        window.location.href = '/profile';
+        document.getElementById('voiceStatus').innerHTML = '👤 Opening your profile...';
+    }
+    else {
+        document.getElementById('voiceStatus').innerHTML = '❓ Command not recognized. Try again.';
+    }
+}
+        
+        // Tab switching function
+        function showTab(tabId) {
+            document.querySelectorAll(".tab-content").forEach(tab => {
+                tab.classList.remove("active");
+            });
+            document.getElementById(tabId).classList.add("active");
+
+            document.querySelectorAll(".tab-button").forEach(button => {
+                button.classList.remove("active");
+            });
+            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add("active");
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start voice command listener
+            document.getElementById('startVoiceCommand').addEventListener('click', function() {
+                if (initVoiceRecognition()) {
+                    recognition.start();
+                }
+            });
+
+            // Form submission handler
+            document.getElementById("uploadForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                const fileInput = document.getElementById("audioFile");
+                
+                if (fileInput.files.length === 0) {
+                    alert("⚠ Please select an audio file before submitting!");
+                    return;
+                }
+
+                const formData = new FormData(this);
+                document.getElementById("loading").style.display = "block";
+                document.getElementById("result").innerHTML = "";
+                
+                // Show progress container
+                const progressContainer = document.getElementById("progressContainer");
+                const progressBar = document.getElementById("progressBar");
+                const progressText = document.getElementById("progressText");
+                progressContainer.style.display = "block";
+                progressBar.style.width = "0%";
+                progressText.textContent = "0%";
+
+                // Create and configure XMLHttpRequest for tracking upload progress
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/predict", true);
+                
+                // Track upload progress
+                xhr.upload.addEventListener("progress", function(event) {
+                    if (event.lengthComputable) {
+                        const percentComplete = Math.round((event.loaded / event.total) * 100);
+                        progressBar.style.width = percentComplete + "%";
+                        progressText.textContent = percentComplete + "%";
+                        
+                        // Add a pulsing effect when near completion
+                        if (percentComplete > 90) {
+                            progressBar.style.animation = "pulse 1s infinite";
+                        }
+                    }
+                });
+                
+                // Handle response
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        document.getElementById("loading").style.display = "none";
+                        progressContainer.style.display = "none";
+
+                        if (data.error) {
+                            document.getElementById("result").innerHTML = `<h3 style='color:red;'>⚠ ${data.error}</h3>`;
+                            document.getElementById("downloadReport").style.display = "none";
+                        } else {
+                            let alternativePredictions = "";
+                            if (data.top_predictions && data.top_predictions.length > 0) {
+                                alternativePredictions = data.top_predictions.map(pred => 
+                                    `<li>${pred.raga}: ${pred.confidence}%</li>`).join("");
+                            } else {
+                                alternativePredictions = "<li>No alternative predictions available.</li>";
+                            }
+
+                            document.getElementById("result").innerHTML = `
+                                <h3>🎼 Predicted Raga: <span style="color: green;">${data.raga}</span></h3>
+                                <p>📖 <b>Description:</b> ${data.description}</p>
+                                <p>🎵 <b>Duration:</b> ${data.duration}</p>
+                                <p>🎚 <b>Sample Rate:</b> ${data.sample_rate}</p>
+                                <h4>🔍 Confidence Scores:</h4>
+                                <ul>${alternativePredictions}</ul>
+                                
+                                <div class="vertical-visualization-container">
+                                    <div class="visualization-card">
+                                        <h3>📊 Pitch Contour Plot:</h3>
+                                        <img src="${data.pitch_contour_image}" alt="Pitch Contour" class="visualization-image">
+                                    </div>
+                                </div>
+                            `;
+
+                            document.getElementById("downloadReport").style.display = "block";
+                            document.getElementById("downloadReport").setAttribute("onclick", `window.location.href='/download_report/${data.raga}'`);
+                            lastPredictedRaga = data.raga;
+                        }
+                    } else {
+                        document.getElementById("loading").style.display = "none";
+                        progressContainer.style.display = "none";
+                        document.getElementById("result").innerHTML = `<h3 style='color:red;'>⚠ An error occurred. Please try again.</h3>`;
+                    }
+                };
+                
+                // Handle errors
+                xhr.onerror = function() {
+                    document.getElementById("loading").style.display = "none";
+                    progressContainer.style.display = "none";
+                    document.getElementById("result").innerHTML = `<h3 style='color:red;'>⚠ Network error occurred. Please check your connection and try again.</h3>`;
+                };
+                
+                // Send the form data
+                xhr.send(formData);
+            });
+
+            // Live prediction handler
+            document.getElementById("livePredict").addEventListener("click", function(event) {
+                event.preventDefault();
+                document.getElementById("loading").innerHTML = "🎤 Listening...";
+                document.getElementById("loading").style.display = "block";
+                document.getElementById("result").innerHTML = "";
+
+                fetch("/live_predict")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("loading").style.display = "none";
+
+                    if (data.error) {
+                        document.getElementById("result").innerHTML = `<h3 style='color:red;'>⚠ ${data.error}</h3>`;
+                        document.getElementById("downloadReport").style.display = "none";
+                    } else 
+                    {
+                        document.getElementById("result").innerHTML = `
+                            <h3>🎼 Predicted Raga: <span style="color: green;">${data.raga}</span></h3>
+                            <p>📖 <b>Description:</b> ${data.description}</p>
+                            
+                            <div class="vertical-visualization-container">
+                                <div class="visualization-card">
+                                    <h3>📊 Pitch Contour Plot:</h3>
+                                    <img src="${data.pitch_contour_image}" alt="Pitch Contour" class="visualization-image">
+                                </div>
+                            </div>
+                        `;
+
+                        document.getElementById("downloadReport").style.display = "block";
+                        document.getElementById("downloadReport").setAttribute("onclick", `window.location.href='/download_report/${data.raga}'`);
+                        lastPredictedRaga = data.raga;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("result").innerHTML = `<h3 style='color:red;'>⚠ An error occurred. Please try again.</h3>`;
+                });
+            });
+
+            // Modal event handlers
+            document.getElementById("openModal").addEventListener("click", function() {
+                const modal = document.getElementById("ragaModal");
+                modal.style.display = "block";
+                modal.style.animation = "fadeInSmooth 0.6s ease-in-out";
+                modal.style.opacity = "1";
+            });
+
+            document.querySelector(".close").addEventListener("click", function() {
+                document.getElementById("ragaModal").style.display = "none";
+            });
+
+            window.addEventListener("click", function(event) {
+                const modal = document.getElementById("ragaModal");
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
