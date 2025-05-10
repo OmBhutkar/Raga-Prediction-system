@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Raga Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}?v=2">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=2">
+    
+
+</head>
+<body>
+    <div class="container profile-container">
+        <h2>🎵 User Profile: {{ session.get('username', 'User') }} 🎶</h2>
+        
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total Predictions</h3>
+                <p class="stat-number">{{ total_predictions }}</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Most Frequent Ragas</h3>
+                <ul class="raga-stats">
+                    {% if most_frequent_ragas %}
+                        {% for raga, count in most_frequent_ragas[:3] %}
+                        <li>{{ raga }}: {{ count }} times</li>
+                        {% endfor %}
+                    {% else %}
+                        <li>No predictions yet</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        <h3>Your Prediction History</h3>
+        
+        <div class="prediction-history">
+            {% if predictions %}
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Raga</th>
+                            <th>Confidence</th>
+                            <th>Report</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pred in predictions %}
+                        <tr>
+                            <td>{{ pred.timestamp }}</td>
+                            <td>{{ pred.raga }}</td>
+                            <td>{{ pred.confidence }}%</td>
+                            <td>
+                                <a href="{{ url_for('download_report', raga=pred.raga) }}" class="download-link">📄</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>You haven't made any predictions yet.</p>
+                
+            {% endif %}
+        </div>
+        <h4>After click on logout your all prediction history will be deleted..</h4>
+        <div class="action-buttons">
+            <a href="{{ url_for('home') }}" class="magic-button">Back to Home</a>
+            <a href="{{ url_for('logout') }}" class="magic-button logout-button">Logout</a>
+        </div>
+    </div>
+</body>
+</html>
