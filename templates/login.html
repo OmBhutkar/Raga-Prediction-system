@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Raga Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}?v=2">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}?v=2">
+</head>
+<body>
+    <div class="container">
+        <h2>🎵 Raga Prediction System 🎶</h2>
+        <h3>Exclusive Free Login Access for Music Enthusiasts</h3>
+        
+        <div class="login-form">
+            <form method="post" action="{{ url_for('login') }}">
+                <div class="form-group">
+                    <label for="username">Your Name:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your name" required>
+                </div>
+                <p>We'll create a unique profile for you to track your predictions.</p>
+                <div class="button-group">
+                    <button type="submit" class="magic-button">✨ Continue ✨</button>
+                </div>
+            </form>
+            <div class="button-group" style="margin-top: 10px;">
+                <button type="button" class="magic-button" onclick="window.location.href='{{ url_for('home') }}'">✨ Return to Home ✨</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
