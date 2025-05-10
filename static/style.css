@@ -1,0 +1,706 @@
+/* Background Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: url("https://img.freepik.com/free-vector/black-dotted-background_1053-563.jpg") no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Container with scrolling capability */
+.container {
+    background: rgba(255, 255, 255, 0.85);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 400px;
+    max-width: 90vw;
+    max-height: 80vh; /* Limits height to prevent overflow */
+    overflow-y: auto; /* Enables vertical scrolling when content exceeds max-height */
+    margin: 20px auto;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.5s ease-in-out;
+    
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 65, 108, 0.6) rgba(255, 255, 255, 0.3);
+    
+    /* Important for scroll behavior */
+    scroll-behavior: smooth;
+    scroll-padding-top: 0; /* No padding since we're hiding header */
+}
+
+/* Custom scrollbar for Webkit browsers (Chrome, Safari, etc.) */
+.container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: rgba(255, 65, 108, 0.6);
+    border-radius: 10px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 65, 108, 0.8);
+}
+
+/* Header Section Container */
+.header-section {
+    position: sticky;
+    top: -85px; /* Start with header partially off-screen */
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 10;
+    padding-bottom: 10px;
+    transition: top 0.3s ease-out;
+    border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+    margin-bottom: 15px;
+}
+
+/* Apply this class via JavaScript when scrolling down */
+.header-section.scrolled {
+    top: -150px; /* Push header completely off-screen when scrolled */
+}
+
+/* When scrolling back up, this class can be toggled */
+.header-section.visible {
+    top: 0;
+}
+
+/* Raga Prediction System Header */
+h2 {
+    color: #222;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-bottom: 15px;
+}
+
+/* Hover Effect: Light Up the Background */
+h2:hover {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5);
+    transform: scale(1.03);
+}
+
+/* Navigation Tabs */
+.tab-container {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #ddd;
+    padding: 5px 0;
+}
+
+/* Tab Buttons */
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    position: relative;
+}
+
+/* Active Tab Button */
+.tab-button.active {
+    background: linear-gradient(45deg, #ff4141, #2bffa3);
+    color: white;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0px 4px 8px rgba(255, 65, 108, 0.3);
+}
+
+/* Tab Button Hover Effect */
+.tab-button:hover {
+    transform: scale(1.05);
+}
+
+/* Tab Button Underline Effect */
+.tab-button::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    width: 0%;
+    height: 3px;
+    background: #000000;
+    transition: all 0.3s ease-in-out;
+    transform: translateX(-50%);
+}
+
+/* Active Tab Underline */
+.tab-button.active::after {
+    width: 50%;
+}
+
+/* Tab Content Container */
+.tab-content-container {
+    min-height: 300px; /* Ensures there's space for content */
+    padding-top: 10px;
+}
+
+/* Hide Tab Content Initially */
+.tab-content {
+    display: none;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+    padding: 15px 5px;
+}
+
+/* Show Active Tab */
+.tab-content.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* File Input Styling */
+input[type="file"] {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    max-width: 100%;
+}
+
+/* "Magic Predict" Button */
+.magic-button {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 10px;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(255, 65, 108, 0.5);
+}
+
+/* Button Hover Effect */
+.magic-button:hover {
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+    transform: scale(1.05);
+    box-shadow: 0px 6px 15px rgba(255, 65, 108, 0.8);
+}
+
+/* Smooth Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading Animation */
+#loading {
+    display: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff2bd1;
+    margin-top: 20px;
+}
+
+/* Result Text */
+#result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    max-width: 90vw;
+    background: white;
+    padding: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in-out;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Modal Content */
+.modal-content {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Close Button */
+.close {
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+}
+
+/* Close Button Hover Effect */
+.close:hover {
+    color: darkred;
+}
+
+@keyframes rotateFadeIn {
+    0% {
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.8);
+    }
+    50% {
+        opacity: 0.5;
+        transform: rotate(-20deg) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+/* Back to top button - appears when scrolling */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 100;
+}
+
+.back-to-top.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px);
+}
+
+/* Responsive adjustments */
+@media (max-height: 700px) {
+    .container {
+        max-height: 85vh;
+    }
+    
+    h2 {
+        font-size: 20px;
+        padding: 8px;
+    }
+    
+    .tab-button {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .magic-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 450px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h2 {
+        font-size: 18px;
+    }
+    
+    .tab-button {
+        font-size: 13px;
+        padding: 6px;
+    }
+}
+
+/* Add these CSS styles to your existing style.css file */
+
+/* Visualization Container Styles */
+.visualization-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* Individual Visualization Card Styles */
+.visualization-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.visualization-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.visualization-card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2em;
+}
+
+/* Image Styles */
+.visualization-image {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    display: block;
+}
+
+/* Media query for larger screens */
+@media (min-width: 768px) {
+    .visualization-container {
+        flex-direction: row;
+    }
+    
+    .visualization-card {
+        flex: 1;
+    }
+}
+
+/* Add these styles to your existing CSS file */
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.color-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.color-box.green {
+    background-color: rgba(0, 128, 0, 0.3);
+}
+
+.color-box.red {
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+.viz-description {
+    font-size: 13px;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Make the visualization cards larger */
+.visualization-card {
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+/* Ensure the visualization image is properly displayed */
+.visualization-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 400px;
+}
+
+.vertical-visualization-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 30px 0;
+    width: 100%;
+}
+
+.visualization-card {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 15px;
+    background-color: #f9f9f9;
+    transition: transform 0.3s ease;
+}
+
+.visualization-card:hover {
+    transform: translateY(-5px);
+}
+
+.visualization-image {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* Progress bar styles */
+.progress-container {
+    width: 100%;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    margin: 15px 0;
+    overflow: hidden;
+    display: none;
+}
+
+.progress-bar {
+    height: 20px;
+    background: linear-gradient(90deg, #000, #000);
+    border-radius: 20px;
+    width: 0%;
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-text {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+
+.user-profile-link {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.profile-button {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.profile-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Add these styles to your existing CSS file */
+
+/* Profile Container */
+.profile-container {
+    max-width: 800px;
+    padding: 30px;
+}
+
+/* Dashboard Stats */
+.dashboard-stats {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ff416c;
+    margin: 10px 0;
+}
+
+.raga-stats {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.raga-stats li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Prediction History Table */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.history-table th, .history-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.history-table th {
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    font-weight: normal;
+}
+
+.history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.history-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.download-link {
+    display: inline-block;
+    background: #f0f0f0;
+    color: #333;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.download-link:hover {
+    background: #ff416c;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 15px; /* Creates space between buttons */
+    margin-top: 20px;
+}
+
+.magic-button {
+    text-decoration: none; /* Removes the underline */
+}
+
+.logout-button {
+    background: linear-gradient(45deg, #666, #333);
+}
+
+.logout-button:hover {
+    background: linear-gradient(45deg, #333, #666);
+}
+
+/* Login Form */
+.login-form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.login-form p {
+    margin-bottom: 15px;
+    color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dashboard-stats {
+        flex-direction: column;
+    }
+    
+    .stat-card {
+        width: 100%;
+    }
+    
+    .history-table {
+        font-size: 14px;
+    }
+    
+    .history-table th, .history-table td {
+        padding: 8px 10px;
+    }
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.magic-button {
+    flex: 1;
+}
