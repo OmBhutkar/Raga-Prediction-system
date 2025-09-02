@@ -1,73 +1,81 @@
-````markdown
 # 🎶 Raga Prediction System 🎶
 
-Welcome to the Raga Prediction System! This is a web-based application built to identify and classify Indian Classical Music Ragas from audio inputs. Whether you're a musician, a student, or just a music enthusiast, this tool can help you analyze and understand ragas in a fun, interactive way. 🎤
+Welcome to the **Raga Prediction System**!  
+This is a web-based application built to identify and classify **Indian Classical Music Ragas** from audio inputs.  
+
+Whether you're a 🎼 musician, 🎓 student, or just a 🎧 music enthusiast, this tool can help you analyze and understand ragas in a fun and interactive way.  
+
+---
 
 ## ✨ Features
 
--   **🎵 Predict from File**: Upload a `.wav` audio file and get an instant raga prediction.
--   **🔴 Live Recording**: Record a 10-second audio clip directly in your browser for real-time raga identification.
--   **👤 User Profiles**: Create a simple user profile to track your prediction history.
--   **📊 Prediction Dashboard**: View your total predictions and a list of your most frequently identified ragas.
--   **📈 Detailed Analysis**: For each prediction, the system generates:
-    -   The predicted Raga name and a brief description.
-    -   Confidence scores for the top predictions.
-    -   Visualizations of the audio's pitch contour and waveform.
--   **📄 PDF Reports**: Download a beautifully formatted PDF report summarizing the entire analysis for each prediction.
+- 🎵 **Predict from File** → Upload a `.wav` audio file and get an instant raga prediction.  
+- 🔴 **Live Recording** → Record a 10-second audio clip directly in your browser for real-time raga identification.  
+- 👤 **User Profiles** → Create a profile to track your prediction history.  
+- 📊 **Prediction Dashboard** → View your total predictions and most frequently identified ragas.  
+- 📈 **Detailed Analysis** → For each prediction, the system shows:  
+  - 🎼 Predicted Raga name + description  
+  - 📊 Confidence scores for top predictions  
+  - 🎶 Pitch contour & waveform visualization  
+- 📄 **PDF Reports** → Download a beautifully formatted report of your prediction.  
+
+---
 
 ## 🚀 How to Run the Project
 
-Follow these simple steps to get the Raga Prediction System up and running on your local machine.
+Follow these steps to run the project locally:
 
-### 1. **Prerequisites** 🛠️
+### 1. 🛠️ Prerequisites
+- Python **3.8+**  
+- `pip` package manager  
 
-Make sure you have Python (version 3.8 or higher) and `pip` installed on your system.
+---
 
-### 2. **Clone the Repository** 📂
-
-Open your terminal or command prompt and clone the project repository:
+### 2. 📂 Clone the Repository
 
 ```bash
 git clone <your-repository-url>
 cd <repository-name>
 ````
 
-### 3\. **Set Up a Virtual Environment (Recommended)** 🌳
+---
 
-It's a good practice to create a virtual environment to manage project dependencies.
+### 3. 🌳 Create Virtual Environment (Recommended)
 
 ```bash
-# For Windows
+# Windows
 python -m venv venv
 venv\Scripts\activate
 
-# For macOS/Linux
+# macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 4\. **Install Dependencies** 📦
+---
 
-Install all the required libraries using the `requirements.txt` file.
+### 4. 📦 Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**Note for `sounddevice` users:** You might need to install system-level dependencies for this library.
+⚠️ For `sounddevice`, you may need system packages:
 
-  - **On Debian/Ubuntu:** `sudo apt-get install libportaudio2`
-  - **On macOS (using Homebrew):** `brew install portaudio`
+* **Ubuntu/Debian:** `sudo apt-get install libportaudio2`
+* **macOS (Homebrew):** `brew install portaudio`
 
-### 5\. **Prepare Your Data and Model** 🧠
+---
 
-Make sure you have the following files in your project's root directory:
+### 5. 🧠 Prepare Model & Data
 
-  - `raga_model.h5` (the trained model)
-  - `label_classes.npy` (the raga labels)
-  - `X.npy` and `y.npy` (if you plan to retrain the model)
+Ensure the following files exist in your project root:
 
-Your project structure should look like this:
+* `raga_model.h5` → trained model
+* `label_classes.npy` → class labels
+* `X.npy`, `y.npy` → training data (optional, if retraining)
+
+📂 Example structure:
 
 ```
 .
@@ -79,27 +87,35 @@ Your project structure should look like this:
 │   ├── login.html
 │   └── profile.html
 ├── static/
-│   └── (your css, js, images)
+│   └── (CSS, JS, Images)
 ├── raga_model.h5
 └── label_classes.npy
 ```
 
-### 6\. **Run the Application\!** 🎉
+---
 
-Now, you're ready to start the Flask web server.
+### 6. 🎉 Run the Application
 
 ```bash
 python app.py
 ```
 
-You should see an output like this, indicating that the server is running:
+Expected output:
 
 ```
- * Running on [http://127.0.0.1:5000/](http://127.0.0.1:5000/) (Press CTRL+C to quit)
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
 
-### 7\. **Open in Your Browser** 🌐
+---
 
-Open your favorite web browser and navigate to the following address:
+### 7. 🌐 Open in Browser
 
-**[http://127.0.0.1:5000](https://www.google.com/search?q=http://127.0.0.1:5000)**
+Go to:
+👉 [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+---
+
+✨ That’s it! You’re ready to explore the magical world of ragas with the **Raga Prediction System**.
+Enjoy making music! 🎶😊
+
+```
