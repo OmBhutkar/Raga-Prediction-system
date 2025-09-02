@@ -1,0 +1,10 @@
+flask
+numpy
+librosa
+tensorflow
+matplotlib
+sounddevice
+scipy
+reportlab
+scikit-learn
+werkzeug
