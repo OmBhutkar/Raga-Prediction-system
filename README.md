@@ -119,9 +119,3 @@ Go to:
 Enjoy making music! 🎶😊
 
 ```
-
----
-
-👉 Replace your current `README.md` with this version and push to GitHub.  
-Would you like me to also **add a section at the bottom** explaining how to use **Git LFS** for uploading `raga_model.h5`?
-```
