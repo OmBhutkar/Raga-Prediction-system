@@ -1,4 +1,3 @@
-````markdown
 # 🎶 Raga Prediction System 🎶
 
 Welcome to the Raga Prediction System! This is a web-based application built to identify and classify Indian Classical Music Ragas from audio inputs. Whether you're a musician, a student, or just a music enthusiast, this tool can help you analyze and understand ragas in a fun, interactive way. 🎤
