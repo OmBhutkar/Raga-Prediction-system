@@ -1,4 +1,3 @@
-````markdown
 # 🎶 Raga Prediction System 🎶
 
 Welcome to the **Raga Prediction System**!  
@@ -14,11 +13,11 @@ Whether you're a 🎼 musician, 🎓 student, or just a 🎧 music enthusiast, t
 - 🔴 **Live Recording** → Record a 10-second audio clip directly in your browser for real-time raga identification.  
 - 👤 **User Profiles** → Create a profile to track your prediction history.  
 - 📊 **Prediction Dashboard** → View your total predictions and most frequently identified ragas.  
-- 📈 **Detailed Analysis** → For each prediction, the system shows:
-  - ✅ Predicted Raga name + description  
+- 📈 **Detailed Analysis** → For each prediction, the system shows:  
+  - 🎼 Predicted Raga name + description  
   - 📊 Confidence scores for top predictions  
-  - 🎼 Pitch contour & waveform visualization  
-- 📄 **PDF Reports** → Download a beautifully formatted report of your prediction.
+  - 🎶 Pitch contour & waveform visualization  
+- 📄 **PDF Reports** → Download a beautifully formatted report of your prediction.  
 
 ---
 
@@ -28,7 +27,7 @@ Follow these steps to run the project locally:
 
 ### 1. 🛠️ Prerequisites
 - Python **3.8+**  
-- `pip` package manager
+- `pip` package manager  
 
 ---
 
@@ -116,5 +115,13 @@ Go to:
 
 ---
 
-Do you want me to also add a **section in README about using Git LFS for large files** (like your `raga_model.h5`)?
+✨ That’s it! You’re ready to explore the magical world of ragas with the **Raga Prediction System**.
+Enjoy making music! 🎶😊
+
+```
+
+---
+
+👉 Replace your current `README.md` with this version and push to GitHub.  
+Would you like me to also **add a section at the bottom** explaining how to use **Git LFS** for uploading `raga_model.h5`?
 ```
